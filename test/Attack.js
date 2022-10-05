@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
 describe('Attack', () => {
-  let a, b, attack, deployer, attacker
+  let a, b, c
 
   beforeEach(async () => {
     const A = await ethers.getContractFactory('A')
@@ -11,8 +11,8 @@ describe('Attack', () => {
     const B = await ethers.getContractFactory('B')
     b = await B.deploy(a.address)
 
-    const Attack = await ethers.getContractFactory('Attack')
-    attack = await Attack.deploy(b.address)
+    const C = await ethers.getContractFactory('C')
+    c = await C.deploy(b.address)
 
     let accounts = await ethers.getSigners()
     deployer = accounts[0]
@@ -29,12 +29,12 @@ describe('Attack', () => {
       expect(await b.owner()).to.equal(deployer.address)
 
       // Perform the attack
-      let tx = await attack.connect(attacker).attack()
+      let tx = await c.connect(attacker).attack()
       await tx.wait()
 
       // Check the new owner
       console.log("Owner of B:", await b.owner())
-      expect(await b.owner()).to.equal(attack.address)
+      expect(await b.owner()).to.equal(c.address)
     })
 
   })

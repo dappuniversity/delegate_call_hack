@@ -26,7 +26,7 @@ contract B {
     }
 }
 
-contract Attack {
+contract C {
     address public b;
 
     constructor(address _b) {
